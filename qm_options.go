@@ -128,6 +128,7 @@ func (c *NetworkDevice) GetQMOptionValue() string {
 
 type VirtIODevice struct {
 	File     *string
+	Cache    *string
 	Format   *VolumeFormat
 	Backup   *bool
 	IOThread *bool
@@ -146,6 +147,8 @@ func NewVirtIODeviceFromString(value string) *VirtIODevice {
 			switch k {
 			case "file":
 				d.File = String(v)
+			case "cache":
+				d.Cache = String(v)
 			case "format":
 				format, _ := VolumeFormatFromString(v)
 				d.Format = &format
@@ -169,6 +172,9 @@ func (c *VirtIODevice) GetQMOptionValue() string {
 	v := make([]string, 0, 1)
 	if c.File != nil {
 		v = append(v, fmt.Sprintf("%s=%s", "file", *c.File))
+	}
+	if c.Cache != nil {
+		v = append(v, fmt.Sprintf("%s=%s", "cache", *c.Cache))
 	}
 	if c.Format != nil {
 		v = append(v, fmt.Sprintf("%s=%s", "format", c.Format.String()))
@@ -235,7 +241,7 @@ func (c *IDEDevice) GetQMOptionValue() string {
 
 // Serial device
 type SerialDevice struct {
-	Value  string
+	Value string
 }
 
 func NewSerialDeviceFromString(value string) *SerialDevice {
